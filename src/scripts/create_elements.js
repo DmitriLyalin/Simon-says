@@ -29,4 +29,4 @@ export let createElement = (settings) => {
   return element;
 }
 
-const elem1 = createElement({ tag: 'div', text: 'text', classes: ['bottom'], parent: document.body, });
+
