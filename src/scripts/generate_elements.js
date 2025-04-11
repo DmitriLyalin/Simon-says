@@ -10,8 +10,8 @@ const headerTitle = createElement({ tag: 'h1', text: 'Simon Says Game', parent: 
 //main
 const main = createElement({ tag: 'main', parent: document.body, classes: ['main'] });
 const mainContainer = createElement({ parent: main, classes: ['container'] });
-const button = createElement({ tag: 'button', text: 'Start', parent: mainContainer, classes: ['main__btn', 'button'] });
-const levelContainer = createElement({ parent: mainContainer, classes: ['level-container'] });
+export const button = createElement({ tag: 'button', text: 'Start', parent: mainContainer, classes: ['main__btn', 'button'] });
+export const levelContainer = createElement({ parent: mainContainer, classes: ['level-container'] });
 
 // Levels of difficulty
 const labelEasy = createElement({ tag: 'label', text: 'easy', parent: levelContainer, attributes: { for: 'easy' } })
