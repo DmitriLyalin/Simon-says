@@ -10,16 +10,10 @@ const getRandomElement = (arr) => {
 };
 
 const highlightRandomElement = () => {
-  let randomNumber = getRandomElement(digits);
+  // let randomNumber = getRandomElement(digits);
   const divs = Array.from(document.querySelectorAll('.keyboard__key'));
-  divs.forEach((div) => {
-    if (div.innerText === randomNumber.toString()) {
-      console.log(`This number is ${randomNumber}`);
-      div.style.color = "green"
-    }
-  })
-
-
+  console.log(divs)
+  let randomDiv = getRandomElement(divs);
+  randomDiv.style.color = "green"
 }
 
-console.log(highlightRandomElement())
