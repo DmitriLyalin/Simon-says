@@ -29,7 +29,7 @@ export const keyboardWrapper = createElement({ parent: mainContainer, classes: [
 const input = createElement({ tag: 'input', parent: mainContainer, classes: ['input'] });
 input.setAttribute('readonly', '');
 const buttonBox = createElement({ parent: mainContainer, classe: ['button-wrapper'] });
-const newGameBtn = createElement({ tag: 'button', text: 'New Game', parent: buttonBox, classes: ['button'] });
-const repeatGameBtn = createElement({ tag: 'button', text: 'Repeat Sequence', parent: buttonBox, classes: ['button'] });
+export const newGameBtn = createElement({ tag: 'button', text: 'New Game', parent: buttonBox, classes: ['button'] });
+export const repeatGameBtn = createElement({ tag: 'button', text: 'Repeat Sequence', parent: buttonBox, classes: ['button'] });
 const nextBtn = createElement({ tag: 'button', text: 'Next Round', parent: buttonBox, classes: ['button'] });
 const roundNumber = createElement({ tag: 'p', text: '1/5 round', parent: buttonBox, classes: ['text'] })
