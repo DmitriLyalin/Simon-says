@@ -2,10 +2,22 @@ import { levelContainer } from "./generate_elements.js";
 import { createKeyboard } from "./keyboard.js";
 import { keyboardWrapper } from "./generate_elements.js"
 import { button } from "./generate_elements.js";
+import { roundNumber } from "./generate_elements.js";
 import { letters } from "./keyboard.js"
 import { digits } from "./keyboard.js"
-
+const rounds = document.querySelector('.text')
 const input = document.querySelector('.input'); // выбор строки ввода для вывода цифр
+export const keyboardsWrapper = document.querySelector('.keyboard')
+const roundCounter = () => {
+  let round = 1;
+  let roundsNum = 5;
+  return {
+    getRound: () => round,
+    increment: () => ++round,
+    clear: () => { round = 1 },
+    getroundsNum: () => roundsNum,
+  }
+}
 export const createGameStateManager = () => { // замыкание отслеживающее состояние игры, выкл и вкл
   let isActive = false;
   return {
@@ -22,7 +34,7 @@ export const counterManager = () => { //Функция управляет сос
     clear: () => { counter = 0 }, // Увеличивает счетчик на единицу.
   };
 };
-
+export const roundManager = roundCounter();
 export const counterState = counterManager(); // Создает замыкание. Объяект в через методы котороого мы получаем доступ к счетчику
 export const gameState = createGameStateManager(); // замыкание
 
@@ -67,13 +79,14 @@ export const refreshPage = () => { // функция обнуляет состо
   highlightedDivs.forEach((div) => { // все переклашенные элементы возвращается в черный цвет
     div.style.color = "black";
   })
-  highlightedDivs = []; // чистим массив с элементами
+  highlightedDivs = [];
+  // чистим массив с элементами
 }
 
 
 
 export const checkKeys = (pressedKey) => { //Функция проверяет, соответствует ли нажатая клавиша тексту в подсвеченных элементах:
- let currentDiv = highlightedDivs[counterState.get()] // устанавливает текущий элемент
+  let currentDiv = highlightedDivs[counterState.get()] // устанавливает текущий элемент
   if (counterState.get() < highlightedDivs.length) { // проверяет условие при котором счетчик меньше длины массива с элементами
     if (pressedKey.toLowerCase() === currentDiv.innerText.toLowerCase()) { // условие проверяет нажатую кнопку 
 
@@ -89,6 +102,32 @@ export const checkKeys = (pressedKey) => { //Функция проверяет, 
       return gameState.start() // меняет состояние игры
     }
   }
+  else {
+    return gameState.start()
+  }
+}
+
+export const checkClikedKey = (clickedKey) => {
+  let currentDiv = highlightedDivs[counterState.get()];
+  if (counterState.get() < highlightedDivs.length) {
+    if (clickedKey.innerText === currentDiv.innerText) {
+      console.log(`Correct! You clicked: ${clickedKey.innerText}`)
+      counterState.increment(); // увеличивает счетчик состояния
+      console.log(`increment ${counterState.get()}`)
+      input.value += clickedKey.innerText;
+    }
+    else {
+      input.value += clickedKey.innerText;
+      console.log(`Wrong key. You pressed: ${clickedKey.innerText}`);
+      return gameState.start()
+    }
+  }
+  else {
+    console.log('cecle ended')
+    
+    return gameState.start()
+  }
+
 }
 
 
@@ -101,10 +140,47 @@ export const keydownHandler = (event) => { // Отслеживает нажат�
     if (!gameState.getState()) {
       checkKeys(pressedKey);
     }
-    else { return gameState.getState() }
+    else {
+      return gameState.getState();
+
+    }
   }
 };
 
+// Select the parent container of the keyboard
 
 
+// Add a click event listener to the parent container
+
+
+
+//click handler
+export const clickHandler = (event) => { // Отслеживает нажатие клавиш, используя event.key.
+  // Use the `closest` method to find the nearest element with the class "keyboard__key"
+  if (!gameState.getState()) {
+    console.log(gameState.getState())
+    let clickedKey = event.target.closest('.keyboard__key');
+    checkClikedKey(clickedKey);
+  }
+ else {
+  keyboardsWrapper.removeEventListener('click', clickHandler);
+ }
+};
+// changing rounds
+
+export const changeRounds = () => {
+
+  if (roundManager.getRound() < roundManager.getroundsNum()) {
+    roundManager.increment()
+    return roundManager.getRound();
+
+  }
+  console.log(gameState.getState());
+  roundManager.clear()
+  return roundManager.getRound();
+}
+
+export const writeRounds = () => {
+  rounds.innerText = `${roundManager.getRound()} / ${roundManager.getroundsNum()} round`
+}
 

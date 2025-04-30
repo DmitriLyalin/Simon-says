@@ -10,7 +10,16 @@ import { keydownHandler } from "./functions.js";
 import { repeatHighlighted } from "./functions.js";
 import { repeatGameBtn } from "./generate_elements.js";
 import { newGameBtn } from "./generate_elements.js";
+import { nextBtn } from "./generate_elements.js";
+
 import { gameState } from "./functions.js";
+import { changeRounds } from "./functions.js";
+import { roundManager } from "./functions.js";
+import { writeRounds } from "./functions.js";
+import { checkClikedKey } from "./functions.js";
+import { clickHandler } from "./functions.js";
+import { keyboardsWrapper } from "./functions.js";
+
 
 
 
@@ -35,6 +44,8 @@ button.addEventListener("click", (e) => { // При нажатии на кноп
     
     document.addEventListener('keydown', keydownHandler);
     console.log('Keydown event listener added after delay');
+    keyboardsWrapper.addEventListener('click', clickHandler);
+    console.log('Click event listener added after delay');
   }, 3000);
    // 3000ms = 3 seconds
 });
@@ -49,7 +60,19 @@ repeatGameBtn.addEventListener("click", (e) => {
 });
 newGameBtn.addEventListener("click", (e) => {
   refreshPage();
- 
-  
-  
+  roundManager.clear()
+  writeRounds()
 });
+
+nextBtn.addEventListener ("click", (e) => {
+  refreshPage();
+  let numberRound = changeRounds();
+  writeRounds()
+  startHighlighting(2 * numberRound);
+  setTimeout(() => { //После задержки в 3 секунды (3000ms) добавляет обработчик событий на keydown.
+    
+    document.addEventListener('keydown', keydownHandler);
+    console.log('Keydown event listener added after delay');
+  }, 3000);
+})
+

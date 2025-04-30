@@ -1,0 +1,18 @@
+.input__radio{ 
+  appearance: none;
+}
+
+.level-container {
+  display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 27px;
+    & label {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+}
+.level-checked {
+  color: $accent;
+}
