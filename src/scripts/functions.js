@@ -108,8 +108,13 @@ export const checkKeys = (pressedKey) => { //Функция проверяет, 
   let currentDiv = highlightedDivs[counterState.get()] // устанавливает текущий элемент
   if (counterState.get() < highlightedDivs.length) { // проверяет условие при котором счетчик меньше длины массива с элементами
     if (pressedKey.toLowerCase() === currentDiv.innerText.toLowerCase()) { // условие проверяет нажатую кнопку 
-
+        currentDiv.classList.add('highlighted');
+        setTimeout(() => {
+          currentDiv.classList.remove('highlighted');
+        }, 300);
+  
       console.log(`Correct! You pressed: ${pressedKey}`)
+
       counterState.increment(); // увеличивает счетчик состояния
       console.log(`increment ${counterState.get()}`)
       input.value += pressedKey; // запись значения кнопки в input 
@@ -117,6 +122,10 @@ export const checkKeys = (pressedKey) => { //Функция проверяет, 
 
     else {
       input.value += pressedKey;
+      currentDiv.classList.add('highlighted--error');
+        setTimeout(() => {
+          currentDiv.classList.remove('highlighted--error');
+        }, 300);
       console.log(`Wrong key. You pressed: ${pressedKey}`);
       return gameState.start() // меняет состояние игры
     }
