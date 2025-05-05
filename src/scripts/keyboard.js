@@ -8,7 +8,7 @@ export const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 export const createKeyboard = (type) => {
 
 
-  let keyboard = createElement({ parent: keyboardWrapper, clearParent: true, classes: ['keyboard'] });
+ let keyboard = createElement({ parent: keyboardWrapper, clearParent: true, classes: ['keyboard'] });
   if (type === 'easy' || type === 'hard') {
     let digitsRow = createElement({ parent: keyboard, classes: ['keyboard__row'] });
     digits.forEach((digit) => {

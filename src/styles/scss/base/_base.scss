@@ -55,3 +55,9 @@ body {
 .no-scroll {
   overflow-y: hidden;
 }
+
+.disabled{
+  cursor: default;
+  pointer-events: none;
+  opacity: 70%;
+}

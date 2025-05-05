@@ -5,9 +5,10 @@ import { button } from "./generate_elements.js";
 import { roundNumber } from "./generate_elements.js";
 import { letters } from "./keyboard.js"
 import { digits } from "./keyboard.js"
+import { buttonBox } from "./generate_elements.js";
 const rounds = document.querySelector('.text')
 const input = document.querySelector('.input'); // выбор строки ввода для вывода цифр
-export const keyboardsWrapper = document.querySelector('.keyboard')
+// export const keyboardsWrapper = document.querySelector('.keyboard')
 const roundCounter = () => {
   let round = 1;
   let roundsNum = 5;
@@ -47,7 +48,13 @@ const getRandomElement = (arr) => {
 export const highlightRandomElement = () => {
   const divs = Array.from(document.querySelectorAll('.keyboard__key')); // Преобразует их в массив (Array.from) для работы с функцией getRandomElement.
   let randomDiv = getRandomElement(divs);
-  randomDiv.style.color = "red";
+  setTimeout(() => {
+    randomDiv.classList.add('highlighted');
+    setTimeout(() => {
+      randomDiv.classList.remove('highlighted');
+    }, 500);
+  }, 1000)
+
   return randomDiv;
 }
 export let highlightedDivs = []; // Массив, предназначенный для хранения всех подсвеченных элементов.
@@ -64,21 +71,33 @@ export const startHighlighting = (maxCount) => { // Функция запуск�
     }
   }, 1000);
 };
-export const repeatHighlighted = () => { // Функция повторяет выделенные элементы 
-  input.value = " "
-  highlightedDivs.forEach((div) => {
-    div.style.color = "green";
+export const repeatHighlighted = () => {
+  // Функция повторяет выделенные элементы 
+  input.value = " ";
+  gameState.stop(); // обновляет состояние игры
+  counterState.clear() // обновляет счетчик
+  highlightedDivs.forEach((div, index) => {
+    setTimeout(() => {
+      div.classList.add('highlighted');
+      setTimeout(() => {
+        div.classList.remove('highlighted');
+      }, 500);
+    }, index * 1000)
   })
 }
 
-export const refreshPage = () => { // функция обнуляет состояние игры
+export const refreshPage = () => {
+  levelContainer.classList.remove('disabled');
+  button.classList.remove('hidden');
+  buttonBox.classList.add('hidden')
+  // функция обнуляет состояние игры;
   input.value = ""; // чистит input
   gameState.stop(); // обновляет состояние игры
   counterState.clear() // обновляет счетчик
   document.removeEventListener('keydown', keydownHandler); // убирает обработчик событий
-  highlightedDivs.forEach((div) => { // все переклашенные элементы возвращается в черный цвет
-    div.style.color = "black";
-  })
+  // highlightedDivs.forEach((div) => { // все переклашенные элементы возвращается в черный цвет
+  //   div.style.color = "black";
+  // })
   highlightedDivs = [];
   // чистим массив с элементами
 }
@@ -111,6 +130,14 @@ export const checkClikedKey = (clickedKey) => {
   let currentDiv = highlightedDivs[counterState.get()];
   if (counterState.get() < highlightedDivs.length) {
     if (clickedKey.innerText === currentDiv.innerText) {
+
+      setTimeout(() => {
+        clickedKey.classList.add('highlighted');
+        setTimeout(() => {
+          clickedKey.classList.remove('highlighted');
+        }, 200);
+      }, 400)
+
       console.log(`Correct! You clicked: ${clickedKey.innerText}`)
       counterState.increment(); // увеличивает счетчик состояния
       console.log(`increment ${counterState.get()}`)
@@ -118,13 +145,19 @@ export const checkClikedKey = (clickedKey) => {
     }
     else {
       input.value += clickedKey.innerText;
+      setTimeout(() => {
+        clickedKey.classList.add('highlighted--error');
+        setTimeout(() => {
+          clickedKey.classList.remove('highlighted--error');
+        }, 200);
+      }, 400)
       console.log(`Wrong key. You pressed: ${clickedKey.innerText}`);
       return gameState.start()
     }
   }
   else {
     console.log('cecle ended')
-    
+
     return gameState.start()
   }
 
@@ -162,9 +195,9 @@ export const clickHandler = (event) => { // Отслеживает нажати�
     let clickedKey = event.target.closest('.keyboard__key');
     checkClikedKey(clickedKey);
   }
- else {
-  keyboardsWrapper.removeEventListener('click', clickHandler);
- }
+  else {
+    // keyboardsWrapper.removeEventListener('click', clickHandler);
+  }
 };
 // changing rounds
 

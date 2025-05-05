@@ -130,6 +130,12 @@ body {
   overflow-y: hidden;
 }
 
+.disabled {
+  cursor: default;
+  pointer-events: none;
+  opacity: 70%;
+}
+
 .header__title-wrapper {
   padding: 15px 0;
 }
@@ -236,6 +242,19 @@ body {
   background-color: rgba(130, 127, 127, 0.649);
   box-shadow: 20px 20px 20px 0px #0f0f0f;
   transition: all 0.3s ease;
+}
+.keyboard__key:hover {
+  cursor: pointer;
+}
+
+.highlighted {
+  background: rgba(232, 230, 252, 0.52);
+  box-shadow: rgb(64, 47, 252) 0px 0px 17px 2px, rgba(14, 119, 241, 0.733) 0px 0px 25px;
+}
+
+.highlighted--error {
+  background: rgba(232, 230, 252, 0.52);
+  box-shadow: rgb(217, 3, 3) 0px 0px 17px 2px, rgba(212, 33, 1, 0.733) 0px 0px 25px;
 }
 
 .input {
