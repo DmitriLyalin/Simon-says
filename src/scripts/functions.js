@@ -108,11 +108,11 @@ export const checkKeys = (pressedKey) => { //Функция проверяет, 
   let currentDiv = highlightedDivs[counterState.get()] // устанавливает текущий элемент
   if (counterState.get() < highlightedDivs.length) { // проверяет условие при котором счетчик меньше длины массива с элементами
     if (pressedKey.toLowerCase() === currentDiv.innerText.toLowerCase()) { // условие проверяет нажатую кнопку 
-        currentDiv.classList.add('highlighted');
-        setTimeout(() => {
-          currentDiv.classList.remove('highlighted');
-        }, 300);
-  
+      currentDiv.classList.add('highlighted');
+      setTimeout(() => {
+        currentDiv.classList.remove('highlighted');
+      }, 300);
+
       console.log(`Correct! You pressed: ${pressedKey}`)
 
       counterState.increment(); // увеличивает счетчик состояния
@@ -121,12 +121,19 @@ export const checkKeys = (pressedKey) => { //Функция проверяет, 
     }
 
     else {
-      input.value += pressedKey;
-      currentDiv.classList.add('highlighted--error');
+      input.value += pressedKey.toUpperCase();
+      let keys = [...document.querySelectorAll('.keyboard__key')]; //Получает массив всех элементов клавиш, используя spread-оператор [...NodeList], 
+      // чтобы преобразовать NodeList в обычный массив.
+      let key = keys.find(k => k.innerText.toLowerCase() === pressedKey.toLowerCase()) // Использует метод find(), чтобы найти первую клавишу, текст которой совпадает с нажатой буквой. 
+      // Сравнение производится в нижнем регистре, чтобы избежать проблем с разным написанием.
+      if (key) {
+        key.classList.add('highlighted--error');
         setTimeout(() => {
-          currentDiv.classList.remove('highlighted--error');
+          key.classList.remove('highlighted--error');
         }, 300);
-      console.log(`Wrong key. You pressed: ${pressedKey}`);
+      }else {
+        console.warn(`Key "${pressedKey}" not found on the keyboard.`);
+      }
       return gameState.start() // меняет состояние игры
     }
   }
