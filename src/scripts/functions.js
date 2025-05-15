@@ -6,8 +6,13 @@ import { roundNumber } from "./generate_elements.js";
 import { letters } from "./keyboard.js"
 import { digits } from "./keyboard.js"
 import { buttonBox } from "./generate_elements.js";
+import { nextBtn } from "./generate_elements.js";
+import { repeatGameBtn } from "./generate_elements.js";
+import { gameMessage } from "./generate_elements.js";
+import { gameMessageWin } from "./generate_elements.js";
 const rounds = document.querySelector('.text')
 const input = document.querySelector('.input'); // выбор строки ввода для вывода цифр
+export const time = 1000;
 // export const keyboardsWrapper = document.querySelector('.keyboard')
 const roundCounter = () => {
   let round = 1;
@@ -52,26 +57,36 @@ export const highlightRandomElement = () => {
     randomDiv.classList.add('highlighted');
     setTimeout(() => {
       randomDiv.classList.remove('highlighted');
-    }, 500);
-  }, 1000)
+    }, time / 2);
+  }, time)
 
   return randomDiv;
 }
 export let highlightedDivs = []; // Массив, предназначенный для хранения всех подсвеченных элементов.
-export const startHighlighting = (maxCount) => { // Функция запускает процесс подсвечивания элементов, ограниченный количеством maxCount.
+export const startHighlighting = (maxCount, callback) => { // Функция запускает процесс подсвечивания элементов, ограниченный количеством maxCount.
 
   let count = 0;
   const intervalId = setInterval(() => { //Используется setInterval для выполнения действий с интервалом в 1000 мс (1 секунда).
     let selectedDiv = highlightRandomElement()
     highlightedDivs.push(selectedDiv);
     count++
+    
     if (count === maxCount) {
       clearInterval(intervalId); //Если счетчик достигает значения maxCount, интервал останавливается с помощью clearInterval
-
+      let result = [];
+      highlightedDivs.forEach((div) => {
+        result.push(div.innerText)
+        console.log(result)
+  if (callback) callback()
+      });
+     
     }
-  }, 1000);
+  }, time);
+
 };
+
 export const repeatHighlighted = () => {
+  gameMessage.classList.add('visually-hidden');
   // Функция повторяет выделенные элементы 
   input.value = " ";
   gameState.stop(); // обновляет состояние игры
@@ -81,15 +96,18 @@ export const repeatHighlighted = () => {
       div.classList.add('highlighted');
       setTimeout(() => {
         div.classList.remove('highlighted');
-      }, 500);
-    }, index * 1000)
+      }, time / 2);
+    }, index * time)
   })
+
 }
 
 export const refreshPage = () => {
+  gameMessageWin.classList.add('visually-hidden');
+  gameMessage.classList.add('visually-hidden');
   levelContainer.classList.remove('disabled');
   button.classList.remove('hidden');
-  buttonBox.classList.add('hidden')
+  buttonBox.classList.add('hidden');
   // функция обнуляет состояние игры;
   input.value = ""; // чистит input
   gameState.stop(); // обновляет состояние игры
@@ -102,7 +120,17 @@ export const refreshPage = () => {
   // чистим массив с элементами
 }
 
-
+export const newRound = () => {
+  gameMessageWin.classList.add('visually-hidden');
+  gameMessage.classList.add('visually-hidden');
+  buttonBox.classList.toggle('disabled');
+  input.value = ""; // чистит input
+  gameState.stop(); // обновляет состояние игры
+  counterState.clear();
+  highlightedDivs = [];
+  nextBtn.classList.add('hidden');
+  repeatGameBtn.classList.remove('hidden')
+}
 
 export const checkKeys = (pressedKey) => { //Функция проверяет, соответствует ли нажатая клавиша тексту в подсвеченных элементах:
   let currentDiv = highlightedDivs[counterState.get()] // устанавливает текущий элемент
@@ -114,10 +142,17 @@ export const checkKeys = (pressedKey) => { //Функция проверяет, 
       }, 300);
 
       console.log(`Correct! You pressed: ${pressedKey}`)
-
       counterState.increment(); // увеличивает счетчик состояния
       console.log(`increment ${counterState.get()}`)
-      input.value += pressedKey; // запись значения кнопки в input 
+      input.value += pressedKey;
+      if (counterState.get() === highlightedDivs.length) {
+        gameMessageWin.classList.remove('visually-hidden');
+        nextBtn.classList.remove('hidden');
+        repeatGameBtn.classList.add('hidden')
+
+        return gameState.start()
+      }
+      // запись значения кнопки в input 
     }
 
     else {
@@ -128,10 +163,12 @@ export const checkKeys = (pressedKey) => { //Функция проверяет, 
       // Сравнение производится в нижнем регистре, чтобы избежать проблем с разным написанием.
       if (key) {
         key.classList.add('highlighted--error');
+        gameMessage.classList.remove('visually-hidden');
         setTimeout(() => {
           key.classList.remove('highlighted--error');
-        }, 300);
-      }else {
+        }, 300)
+          ;
+      } else {
         console.warn(`Key "${pressedKey}" not found on the keyboard.`);
       }
       return gameState.start() // меняет состояние игры
@@ -140,42 +177,46 @@ export const checkKeys = (pressedKey) => { //Функция проверяет, 
   else {
     return gameState.start()
   }
+
 }
 
 export const checkClikedKey = (clickedKey) => {
   let currentDiv = highlightedDivs[counterState.get()];
+
   if (counterState.get() < highlightedDivs.length) {
     if (clickedKey.innerText === currentDiv.innerText) {
 
+
+      clickedKey.classList.add('highlighted');
       setTimeout(() => {
-        clickedKey.classList.add('highlighted');
-        setTimeout(() => {
-          clickedKey.classList.remove('highlighted');
-        }, 200);
-      }, 400)
+        clickedKey.classList.remove('highlighted');
+      }, 200);
+
 
       console.log(`Correct! You clicked: ${clickedKey.innerText}`)
       counterState.increment(); // увеличивает счетчик состояния
       console.log(`increment ${counterState.get()}`)
       input.value += clickedKey.innerText;
+      if (counterState.get() === highlightedDivs.length) {
+        gameMessageWin.classList.remove('visually-hidden');
+        nextBtn.classList.remove('hidden')
+        repeatGameBtn.classList.add('hidden');
+        return gameState.start()
+      }
     }
     else {
       input.value += clickedKey.innerText;
+      gameMessage.classList.remove('visually-hidden');
+      clickedKey.classList.add('highlighted--error');
       setTimeout(() => {
-        clickedKey.classList.add('highlighted--error');
-        setTimeout(() => {
-          clickedKey.classList.remove('highlighted--error');
-        }, 200);
-      }, 400)
+        clickedKey.classList.remove('highlighted--error');
+      }, 200);
+
       console.log(`Wrong key. You pressed: ${clickedKey.innerText}`);
       return gameState.start()
     }
   }
-  else {
-    console.log('cecle ended')
 
-    return gameState.start()
-  }
 
 }
 
@@ -183,7 +224,7 @@ export const checkClikedKey = (clickedKey) => {
 export const keydownHandler = (event) => { // Отслеживает нажатие клавиш, используя event.key.
   let pressedKey = event.key;
 
-  const isAlphanumeric = /^[a-zA-Z0-9\u0400-\u04FF\u0500-\u052F]$/; // Проверяет, является ли нажатая клавиша буквенно-цифровой (включая кириллические символы) через регулярное выражение isAlphanumeric.
+  const isAlphanumeric = /^[a-zA-Z0-9]$/; // Проверяет, является ли нажатая клавиша буквенно-цифровой (включая кириллические символы) через регулярное выражение isAlphanumeric.
   if (isAlphanumeric.test(pressedKey)) {
     // Если checkKeys возвращает false (например, достигнут конец подсветки или найдено совпадение), удаляет обработчик событий keydown, чтобы остановить дальнейшее выполнение.
     if (!gameState.getState()) {
@@ -220,7 +261,7 @@ export const clickHandler = (event) => { // Отслеживает нажати�
 export const changeRounds = () => {
 
   if (roundManager.getRound() < roundManager.getroundsNum()) {
-    roundManager.increment()
+    roundManager.increment();
     return roundManager.getRound();
 
   }

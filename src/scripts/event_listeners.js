@@ -1,4 +1,4 @@
-import { levelContainer } from "./generate_elements.js";
+import { levelContainer, roundNumber } from "./generate_elements.js";
 import { createKeyboard } from "./keyboard.js";
 import { button } from "./generate_elements.js";
 import { refreshPage, startHighlighting } from "./functions.js";
@@ -24,7 +24,8 @@ import { roundManager } from "./functions.js";
 import { writeRounds } from "./functions.js";
 import { checkClikedKey } from "./functions.js";
 import { clickHandler } from "./functions.js";
-
+import { newRound } from "./functions.js";
+import { time } from "./functions.js";
 
 
 
@@ -53,54 +54,68 @@ levelContainer.addEventListener("click", (e) => {
 
 
 button.addEventListener("click", (e) => {
-  
-  keyboardWrapper.classList.toggle('disabled');
+
+  keyboardWrapper.classList.add('disabled');
   button.classList.add('hidden'); // При нажатии на кнопку вызывается функция startHighlighting(2) для подсветки двух случайных элементов на странице.
   startHighlighting(2);
   levelContainer.classList.add('disabled');
   buttonBox.classList.remove('hidden');
   buttonBox.classList.add('disabled');
-  input.classList.toggle  ('hidden');
-  setTimeout(() => { //После задержки в 3 секунды (3000ms) добавляет обработчик событий на keydown.
+  input.classList.toggle('hidden');
 
+
+  setTimeout(() => { //После задержки в 3 секунды (3000ms) добавляет обработчик событий на keydown.
+keyboardWrapper.classList.remove('disabled');
     document.addEventListener('keydown', keydownHandler);
     console.log('Keydown event listener added after delay');
     keyboardWrapper.addEventListener('click', clickHandler);
     console.log('Click event listener added after delay');
     buttonBox.classList.remove('disabled');
-  }, 3000);
+  }, time * 4  );
   // 3000ms = 3 seconds
 });
 repeatGameBtn.addEventListener("click", (e) => {
   repeatGameBtn.classList.add('disabled');
-  
+ keyboardWrapper.classList.add('disabled');
+  newGameBtn.classList.add('disabled');
   repeatHighlighted()
   setTimeout(() => { //После задержки в 3 секунды (3000ms) добавляет обработчик событий на keydown.
-
+     keyboardWrapper.classList.remove('disabled');
+    newGameBtn.classList.remove('disabled')
     document.addEventListener('keydown', keydownHandler);
     console.log('Keydown event listener added after delay');
     keyboardWrapper.addEventListener('click', clickHandler);
     console.log('Click event listener added after delay');
-  }, 3000);
+  }, time * highlightedDivs.length);
+
 });
 newGameBtn.addEventListener("click", (e) => {
   keyboardWrapper.classList.toggle('disabled');
-  input.classList.toggle  ('hidden');
+  input.classList.toggle('hidden');
   refreshPage();
   repeatGameBtn.classList.remove('disabled');
-  roundManager.clear()
-  writeRounds()
+  roundManager.clear();
+  writeRounds();
 });
 
-nextBtn.addEventListener("click", (e) => {
-  refreshPage();
+nextBtn.addEventListener("click", () => {
+  keyboardWrapper.classList.add('disabled');
   let numberRound = changeRounds();
-  writeRounds()
-  startHighlighting(2 * numberRound);
-  setTimeout(() => { //После задержки в 3 секунды (3000ms) добавляет обработчик событий на keydown.
+  newRound()
+  writeRounds();
+ startHighlighting(2 * numberRound, () => {
+    setTimeout(() => {
+      keyboardWrapper.classList.remove('disabled');
+      buttonBox.classList.remove('disabled');
+      newGameBtn.classList.remove('disabled');
+      repeatGameBtn.classList.remove('disabled');
 
-    document.addEventListener('keydown', keydownHandler);
-    console.log('Keydown event listener added after delay');
-  }, 3000);
-})
+      document.removeEventListener('keydown', keydownHandler);
+      document.addEventListener('keydown', keydownHandler);
+
+      console.log('Keydown event listener added after delay');
+    }, time * 2 );
+  });
+});
+
 
