@@ -1,5 +1,5 @@
 import { createElement } from "./create_elements.js";
-import { keyboardWrapper } from "./generate_elements.js"
+import { keyboardWrapper } from "./generate_elements/generate_elements.js"
 
 export const letters = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
   "A", "S", "D", "F", "G", "H", "J", "K", "L",
@@ -8,7 +8,7 @@ export const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 export const createKeyboard = (type) => {
 
 
- let keyboard = createElement({ parent: keyboardWrapper, clearParent: true, classes: ['keyboard'] });
+  let keyboard = createElement({ parent: keyboardWrapper, clearParent: true, classes: ['keyboard'] });
   if (type === 'easy' || type === 'hard') {
     let digitsRow = createElement({ parent: keyboard, classes: ['keyboard__row'] });
     digits.forEach((digit) => {

@@ -1,120 +1,86 @@
-import { levelContainer, roundNumber } from "./generate_elements.js";
+
 import { createKeyboard } from "./keyboard.js";
-import { button } from "./generate_elements.js";
-import { refreshPage, startHighlighting } from "./functions.js";
-import { highlightedDivs } from "./functions.js";
-import { checkKeys } from "./functions.js";
-import { counterManager } from "./functions.js";
-import { counterState } from "./functions.js";
-import { keydownHandler } from "./functions.js";
-import { repeatHighlighted } from "./functions.js";
-import { repeatGameBtn } from "./generate_elements.js";
-import { newGameBtn } from "./generate_elements.js";
-import { nextBtn } from "./generate_elements.js";
-import { buttonBox } from "./generate_elements.js";
-import { labelEasy } from "./generate_elements.js";
-import { labelMedium } from "./generate_elements.js";
-import { labelHard } from "./generate_elements.js";
-import { input } from "./generate_elements.js";
-import { keyboardWrapper } from "./generate_elements.js";
 
-import { gameState } from "./functions.js";
-import { changeRounds } from "./functions.js";
-import { roundManager } from "./functions.js";
-import { writeRounds } from "./functions.js";
-import { checkClikedKey } from "./functions.js";
-import { clickHandler } from "./functions.js";
-import { newRound } from "./functions.js";
-import { time } from "./functions.js";
+import * as Elements from "./generate_elements/index.js"
+import * as Functions from "./functions/index.js"
 
-
-
-
-
-levelContainer.addEventListener("click", (e) => {
+Elements.levelContainer.addEventListener("click", (e) => {
   if (e.target.innerText === "easy") {
     createKeyboard('easy');
-    labelHard.classList.remove('level-checked')
-    labelMedium.classList.remove('level-checked')
-    labelEasy.classList.add('level-checked');
+    Elements.labelHard.classList.remove('level-checked')
+    Elements.labelMedium.classList.remove('level-checked')
+    Elements.labelEasy.classList.add('level-checked');
   }
   if (e.target.innerText === "medium") {
     createKeyboard('medium');
-    labelMedium.classList.add('level-checked');
-    labelEasy.classList.remove('level-checked')
-    labelHard.classList.remove('level-checked')
+    Elements.labelMedium.classList.add('level-checked');
+    Elements.labelEasy.classList.remove('level-checked')
+    Elements.labelHard.classList.remove('level-checked')
   }
   if (e.target.innerText === "hard") {
     createKeyboard("hard");
-    labelEasy.classList.remove('level-checked')
-    labelMedium.classList.remove('level-checked')
-    labelHard.classList.add('level-checked')
+    Elements.labelEasy.classList.remove('level-checked')
+    Elements.labelMedium.classList.remove('level-checked')
+    Elements.labelHard.classList.add('level-checked')
   }
 });
 
 
-button.addEventListener("click", (e) => {
+Elements.button.addEventListener("click", (e) => {
 
-  keyboardWrapper.classList.add('disabled');
-  button.classList.add('hidden'); // При нажатии на кнопку вызывается функция startHighlighting(2) для подсветки двух случайных элементов на странице.
-  startHighlighting(2);
-  levelContainer.classList.add('disabled');
-  buttonBox.classList.remove('hidden');
-  buttonBox.classList.add('disabled');
-  input.classList.toggle('hidden');
+  Elements.keyboardWrapper.classList.add('disabled');
+  Elements.button.classList.add('hidden'); // При нажатии на кнопку вызывается функция startHighlighting(2) для подсветки двух случайных элементов на странице.
+  Functions.startHighlighting(2);
+  Elements.levelContainer.classList.add('disabled');
+  Elements.buttonBox.classList.remove('hidden');
+  Elements.buttonBox.classList.add('disabled');
+  Elements.input.classList.toggle('hidden');
 
 
   setTimeout(() => { //После задержки в 3 секунды (3000ms) добавляет обработчик событий на keydown.
-keyboardWrapper.classList.remove('disabled');
-    document.addEventListener('keydown', keydownHandler);
-    console.log('Keydown event listener added after delay');
-    keyboardWrapper.addEventListener('click', clickHandler);
-    console.log('Click event listener added after delay');
-    buttonBox.classList.remove('disabled');
-  }, time * 4  );
+    Elements.keyboardWrapper.classList.remove('disabled');
+    document.addEventListener('keydown', Functions.keydownHandler);
+    Elements.keyboardWrapper.addEventListener('click', Functions.clickHandler);
+    Elements.buttonBox.classList.remove('disabled');
+  }, Functions.time * 4);
   // 3000ms = 3 seconds
 });
-repeatGameBtn.addEventListener("click", (e) => {
-  repeatGameBtn.classList.add('disabled');
- keyboardWrapper.classList.add('disabled');
-  newGameBtn.classList.add('disabled');
-  repeatHighlighted()
+Elements.repeatGameBtn.addEventListener("click", (e) => {
+  Elements.repeatGameBtn.classList.add('disabled');
+  Elements.keyboardWrapper.classList.add('disabled');
+  Elements.newGameBtn.classList.add('disabled');
+  Functions.repeatHighlighted()
   setTimeout(() => { //После задержки в 3 секунды (3000ms) добавляет обработчик событий на keydown.
-     keyboardWrapper.classList.remove('disabled');
-    newGameBtn.classList.remove('disabled')
-    document.addEventListener('keydown', keydownHandler);
-    console.log('Keydown event listener added after delay');
-    keyboardWrapper.addEventListener('click', clickHandler);
-    console.log('Click event listener added after delay');
-  }, time * highlightedDivs.length);
+    Elements.keyboardWrapper.classList.remove('disabled');
+    Elements.newGameBtn.classList.remove('disabled');
+    document.addEventListener('keydown', Functions.keydownHandler);
+    Elements.keyboardWrapper.addEventListener('click', Functions.clickHandler);
+  }, Functions.time * Functions.highlightedDivs.length);
 
 });
-newGameBtn.addEventListener("click", (e) => {
-  keyboardWrapper.classList.toggle('disabled');
-  input.classList.toggle('hidden');
-  refreshPage();
-  repeatGameBtn.classList.remove('disabled');
-  roundManager.clear();
-  writeRounds();
+Elements.newGameBtn.addEventListener("click", (e) => {
+  Elements.keyboardWrapper.classList.toggle('disabled');
+  Elements.input.classList.toggle('hidden');
+  Functions.refreshPage();
+  Elements.repeatGameBtn.classList.remove('disabled');
+  Functions.roundManager.clear();
+  Functions.writeRounds();
 });
 
-nextBtn.addEventListener("click", () => {
-  keyboardWrapper.classList.add('disabled');
-  let numberRound = changeRounds();
-  newRound()
-  writeRounds();
- startHighlighting(2 * numberRound, () => {
+Elements.nextBtn.addEventListener("click", () => {
+  Elements.keyboardWrapper.classList.add('disabled');
+  let numberRound = Functions.changeRounds();
+  Functions.newRound()
+  Functions.writeRounds();
+  Functions.startHighlighting(2 * numberRound, () => {
     setTimeout(() => {
-      keyboardWrapper.classList.remove('disabled');
-      buttonBox.classList.remove('disabled');
-      newGameBtn.classList.remove('disabled');
-      repeatGameBtn.classList.remove('disabled');
-
-      document.removeEventListener('keydown', keydownHandler);
-      document.addEventListener('keydown', keydownHandler);
-
-      console.log('Keydown event listener added after delay');
-    }, time * 2 );
+      Elements.keyboardWrapper.classList.remove('disabled');
+      Elements.buttonBox.classList.remove('disabled');
+      Elements.newGameBtn.classList.remove('disabled');
+      Elements.repeatGameBtn.classList.remove('disabled');
+      document.removeEventListener('keydown', Functions.keydownHandler);
+      document.addEventListener('keydown', Functions.keydownHandler);
+    }, Functions.time * 2);
   });
 });
 

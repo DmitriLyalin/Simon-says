@@ -1,4 +1,4 @@
-import { createElement } from "./create_elements.js"
+import { createElement } from "../create_elements.js"
 
 //header
 
@@ -11,9 +11,9 @@ const headerTitle = createElement({ tag: 'h1', text: 'Simon Says Game', parent: 
 //main
 const main = createElement({ tag: 'main', parent: document.body, classes: ['main'] });
 const mainContainer = createElement({ parent: main, classes: ['container'] });
-const textBox = createElement({parent: mainContainer, classes: ['main__text-box']});
-export const gameMessage = createElement({tag: 'p', parent: textBox, text: 'Wrong key!', classes: ['main__text', 'text--error', 'visually-hidden']});
-export const gameMessageWin = createElement({tag: 'p', parent: textBox, text: 'Well done!', classes: ['main__text', 'text--complete', 'visually-hidden']});
+const textBox = createElement({ parent: mainContainer, classes: ['main__text-box'] });
+export const gameMessage = createElement({ tag: 'p', parent: textBox, text: 'Wrong key!', classes: ['main__text', 'text--error', 'visually-hidden'] });
+export const gameMessageWin = createElement({ tag: 'p', parent: textBox, text: 'Well done!', classes: ['main__text', 'text--complete', 'visually-hidden'] });
 export const button = createElement({ tag: 'button', text: 'Start', parent: mainContainer, classes: ['main__btn', 'button'] });
 export const levelContainer = createElement({ parent: mainContainer, classes: ['level-container'] });
 
