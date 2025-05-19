@@ -18,12 +18,12 @@ export const button = createElement({ tag: 'button', text: 'Start', parent: main
 export const levelContainer = createElement({ parent: mainContainer, classes: ['level-container'] });
 
 // Levels of difficulty
-export const labelEasy = createElement({ tag: 'label', text: 'easy', parent: levelContainer, attributes: { for: 'easy' }, classes: ['level-checked'] })
+export const labelEasy = createElement({ tag: 'label', text: 'easy', parent: levelContainer, attributes: { for: 'easy' }, classes: ['level-checked', 'level-easy'] })
 export const easyLevelBtn = createElement({ tag: 'input', parent: levelContainer, attributes: { type: 'radio', id: 'easy', value: 'easy', name: 'level' }, classes: ['input__radio'] });
 easyLevelBtn.setAttribute('checked', '');
-export const labelMedium = createElement({ tag: 'label', text: 'medium', parent: levelContainer, attributes: { for: 'medium' } })
+export const labelMedium = createElement({ tag: 'label', text: 'medium', parent: levelContainer, attributes: { for: 'medium' }, classes: [ 'level-medium'] })
 const mediumLevelBtn = createElement({ tag: 'input', parent: levelContainer, attributes: { type: 'radio', id: 'medium', value: 'medium', name: 'level' }, classes: ['input__radio'] });
-export const labelHard = createElement({ tag: 'label', text: 'hard', parent: levelContainer, attributes: { for: 'hard' } })
+export const labelHard = createElement({ tag: 'label', text: 'hard', parent: levelContainer, attributes: { for: 'hard' }, classes: [ 'level-hard'] })
 const hardLevelBtn = createElement({ tag: 'input', parent: levelContainer, attributes: { type: 'radio', id: 'hard', value: 'hard', name: 'level' }, classes: ['input__radio'] });
 
 //Keyboard warpper
