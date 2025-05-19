@@ -5,19 +5,20 @@ import * as Elements from "./generate_elements/index.js"
 import * as Functions from "./functions/index.js"
 
 Elements.levelContainer.addEventListener("click", (e) => {
-  if (e.target.innerText === "easy") {
+  if (e.target.closest(".level-easy")?.classList.contains("level-easy")) {
+    console.log(e.target)
     createKeyboard('easy');
     Elements.labelHard.classList.remove('level-checked')
     Elements.labelMedium.classList.remove('level-checked')
     Elements.labelEasy.classList.add('level-checked');
   }
-  if (e.target.innerText === "medium") {
+  if (e.target.closest(".level-medium")?.classList.contains("level-medium")) {
     createKeyboard('medium');
     Elements.labelMedium.classList.add('level-checked');
     Elements.labelEasy.classList.remove('level-checked')
     Elements.labelHard.classList.remove('level-checked')
   }
-  if (e.target.innerText === "hard") {
+  if (e.target.closest(".level-hard")?.classList.contains("level-hard")) {
     createKeyboard("hard");
     Elements.labelEasy.classList.remove('level-checked')
     Elements.labelMedium.classList.remove('level-checked')
