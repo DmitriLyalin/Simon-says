@@ -63,6 +63,8 @@ Elements.newGameBtn.addEventListener("click", (e) => {
   Elements.input.classList.toggle('hidden');
   Functions.refreshPage();
   Elements.repeatGameBtn.classList.remove('disabled');
+  Elements.repeatGameBtn.classList.remove('hidden');
+  Elements.nextBtn.classList.add('hidden');
   Functions.roundManager.clear();
   Functions.writeRounds();
 });
